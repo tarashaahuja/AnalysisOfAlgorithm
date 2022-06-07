@@ -1,0 +1,55 @@
+#include<stdio.h>
+int counter=1;
+int n; 
+int arr[50];  
+int ans[50];  
+int m;
+int total=0;
+void sumOfSubset(int s, int k, int r)
+{
+	int j;
+	ans[k]=1;
+	if(s+arr[k]==m)
+             {
+		printf("Solution %d: ",counter,s);
+		counter++;
+		for(j=0;j<n;j++)
+                          {
+	                          printf(" %d ",ans[j]);				
+		}
+		printf("\n");
+		for(j=k;j<n;j++)
+                          { 
+			ans[j]=0;
+		}	
+		return;					
+	}
+	else if(k!=n-1 && s+arr[k]+arr[k+1]<=m)
+             {
+		sumOfSubset(s+arr[k],k+1,r-arr[k] );	
+	}
+	if(s+r-arr[k]>=m && s+arr[k+1]<=m && k!=n-1 )
+             {
+		ans[k]=0;
+		sumOfSubset(s,k+1,r-arr[k]);	
+	}
+}
+int main(){
+	int i;
+	printf("Enter Total Number of Numbers to be used : ");
+	scanf("%d",&n);
+	printf("Enter Sum to be Calculated : ");
+	scanf("%d",&m);
+	printf("Enter Numbers : ");
+	for ( i = 0; i < n; i++)
+	{
+		scanf("%d",&arr[i]);
+		ans[i]=0;
+	}
+	
+	for(i=0;i<n;i++){
+		total+=arr[i];
+	}
+	sumOfSubset(0,0,total);
+	return 0;
+}

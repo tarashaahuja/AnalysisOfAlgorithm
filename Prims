@@ -1,0 +1,90 @@
+#include <stdio.h>
+#include <stdlib.h>
+int distances[100];
+int completed[100];
+int parent[100];
+int ver;
+int graph[100][100];
+void initializeSource()
+{
+    for (int i = 0; i < ver; i++)
+    {
+        distances[i] = 100;
+        completed[i] = 0;
+        parent[i] = -1;
+    }
+    distances[0] = 0;
+    parent[0] = 0;
+}
+
+void relax(int u, int v)
+{
+    if (distances[v] > graph[u][v])
+    {
+        distances[v] = graph[u][v];
+        parent[v] = u;
+    }
+}
+int extractMin()
+{
+    int min;
+    int some = 0;
+    for (int i = 0; i < ver; i++)
+    {
+        if (completed[i] != 1)
+        {
+            some = 1;
+            min = i;
+            break;
+        }
+    }
+
+    for (int i = 0; i < ver; i++)
+    {
+        if (completed[i] == 0 && distances[i] <= distances[min])
+        {
+            min = i;
+        }
+    }
+    return min;
+}
+int main()
+{
+
+    printf("Enter Total Number Of Vertices In Graph: ");
+    scanf("%d",&ver);
+    printf("Enter Distances For each Vertex-\n");
+    for (int i = 0; i < ver; i++)
+    {
+        printf("From Vertex %c : ",i + 97);
+        for(int j=0;j<ver;j++)
+        {
+            scanf("%d",&graph[i][j]);
+        }
+    }
+    initializeSource();
+    int cur;
+    for (int i = 0; i < ver; i++)
+    {
+        cur = extractMin();
+        for (int i = 0; i < ver; i++)
+        {
+            if (completed[i] == 0 && graph[cur][i] != 0)
+            {
+                relax(cur, i);
+            }
+        }
+        completed[cur] = 1;
+    }
+    int sum = 0;
+    printf("Distances\t");
+    printf("Parent\n");
+    for (int i = 0; i < ver; i++)
+    {
+        printf(" %d\t", distances[i]);
+        printf(" \t%c\n", parent[i] + 97);
+        sum = sum + distances[i];
+    }
+    printf("Cost Of Minimum Spanning Tree: %d\n", sum);
+    return 0;
+}

@@ -1,0 +1,39 @@
+#include<stdio.h>
+void main()
+{
+    int n,i,p,cost[100][100],j,d[100][100];
+    printf("enter the no of nodes");
+    scanf("%d",&n);
+    printf("enter the cost matrix:");
+    for(i=0;i<n;i++)
+    {
+        for(j=0;j<n;j++)
+        {
+            scanf("%d",&cost[i][j]);
+        }
+    }
+    for(p=0;p<n;p++)
+    {
+        for(i=0;i<n;i++)
+        {
+            for(j=0;j<n;j++)
+            {
+                if(i!=j && p!=i && p!=j)
+                {
+                    if(cost[i][p]+cost[p][j]<cost[i][j])
+                    {
+                        cost[i][j]=cost[i][p]+cost[p][j];
+                    }
+                }
+            }
+        }
+    }
+    for(i=0;i<n;i++)
+    {
+        for(j=0;j<n;j++)
+        {
+            printf("%d\t",cost[i][j]);
+        }
+        printf("\n");
+    }
+}

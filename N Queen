@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <stdlib.h>
+static int count = 0;
+void nQueens(int[], int, int);
+void displays(int [], int);
+int place(int [], int, int);
+int main()
+{
+    int n;
+    printf("ENTER NUMBER OF QUEENS: ");
+    scanf("%d", &n);
+    int x[n];
+    nQueens(x, 1, n);
+    return 0;
+}
+void nQueens(int x[], int k, int n)
+{
+    for(int i = 1; i <= n; i++)
+    {
+        if(place(x, k, i))
+        {
+            x[k-1] = i;
+            if(k == n)
+                displays(x, n);
+            else
+                nQueens(x, k+1, n);
+        }
+    }
+}
+int place(int x[], int k, int i)
+{
+    for(int j = 1; j <= k - 1; j++)
+    {
+        if(x[j-1] == i || (x[j-1] - i) == (j - k) || (i - x[j - 1]) == (j - k))
+            return 0;
+    }
+    return 1;
+}
+void displays(int x[], int n)
+{
+    printf("SOLUTION %d IS: ", ++count);
+    for(int i = 0; i < n; i++)
+        printf("%d ", x[i]);
+    printf("\n");
+}

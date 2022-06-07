@@ -1,0 +1,46 @@
+#include <stdio.h>
+
+void greedyKnapsack(int [], int [], float [], int, int);
+
+int main()
+{
+    int n, X;
+    printf("ENTER SIZE OF ARRAY: ");
+    scanf("%d", &n);
+    int p[n], w[n];
+    float res[n];
+    printf("ENTER PROFIT ARRAY: ");
+    for(int i = 0; i < n; i++)
+        scanf("%d", &p[i]);
+    printf("ENTER WEIGHT ARRAY: ");
+    for(int i = 0; i < n; i++)
+        scanf("%d", &w[i]);
+    printf("ENTER KNAPSACK CAPACITY: ");
+    scanf("%d", &X);
+    greedyKnapsack(p, w, res, X, n);
+    return 0;
+}
+
+void greedyKnapsack(int p[], int w[], float res [], int X, int n)
+{
+    for(int i = 0; i < n; i++)
+        res[i] = 0.0;
+    int m = 0;
+    for(int i = 1; i <= n; i++)
+    {
+        if(m + w[i-1] <= X)
+        {
+            res[i-1] = 1.0;
+            m += w[i-1];
+        }
+        else
+        {
+            res[i-1] = (X - m) /(float)(w[i-1]);
+            m = X;
+            break;
+        }
+    }
+    printf("RESULT ARRAY IS: ");
+    for(int i = 0; i < n; i++)
+        printf("%f ", res[i]);
+}

@@ -1,0 +1,71 @@
+#include <stdio.h>
+#include <string.h>
+int b[25][25], c[25 + 1][25 + 1];
+void LCS_Length(char x[], char y[])
+{
+    int m = strlen(x);
+    int n = strlen(y);
+    for (int i = 0; i < m + 1; i++)
+    {
+        c[0][i] = 0;
+    }
+    for (int i = 0; i < m + 1; i++)
+    {
+        c[i][0] = 0;
+    }
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (x[i] == y[j])
+            {
+                c[i + 1][j + 1] = c[i][j] + 1;
+                b[i][j] = 0;
+            }
+            else if (c[i][j + 1] >= c[i + 1][j])
+            {
+                c[i + 1][j + 1] = c[i][j + 1];
+                b[i][j] = 1;
+            }
+            else
+            {
+                c[i + 1][j + 1] = c[i + 1][j];
+                b[i][j] = 2;
+            }
+        }
+    }
+
+    return;
+}
+void Print_LCS(char x[], int i, int j)
+{
+    if (i == -1 || j == -1)
+        return;
+    if (b[i][j] == 0)
+    {
+        Print_LCS(x, i - 1, j - 1);
+        printf("%c ", x[i]);
+    }
+    else if (b[i][j] == 1)
+    {
+        Print_LCS(x, i - 1, j);
+    }
+    else
+    {
+        Print_LCS(x, i, j - 1);
+    }
+}
+
+int main()
+{
+    char str1[100],str2[100];
+    printf("Enter String 1 : ");
+    scanf("%s",&str1);
+    printf("Enter String 2 : ");
+    scanf("%s",&str2);
+    LCS_Length(str1, str2);
+    int m = strlen(str1);
+    int n = strlen(str2);
+    Print_LCS(str1, m, n);
+    return 0;
+}

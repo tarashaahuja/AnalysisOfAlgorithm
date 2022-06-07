@@ -1,0 +1,96 @@
+#include <stdio.h>
+int graph[100][100];
+int set[100];
+int parent[100];
+int ver;
+int edge_no = 0;
+struct edge
+{
+    int pt1;
+    int pt2;
+    int wt;
+    int sol;
+};
+struct edge edges[100];
+void edgesCalulate()
+{
+    int count = 0;
+    for (int i = 0; i < ver; i++)
+    {
+        for (int j = 0; j <= i; j++)
+        {
+            if (graph[i][j] != 0)
+            {
+                edges[count].pt1 = i;
+                edges[count].pt2 = j;
+                edges[count].wt = graph[i][j];
+                edges[count].sol = 0;
+                count++;
+            }
+        }
+    }
+    edge_no = count;
+}
+void edgesSort()
+{
+    struct edge temp;
+    for (int i = 0; i < edge_no; i++)
+    {
+        for (int j = 0; j < edge_no - 1; j++)
+        {
+            if (edges[j].wt > edges[j + 1].wt)
+            {
+                temp = edges[j];
+                edges[j] = edges[j + 1];
+                edges[j + 1] = temp;
+            }
+        }
+    }
+}
+
+int main()
+{
+    printf("Enter Total Number Of Vertices In Graph: ");
+    scanf("%d",&ver);
+    printf("Enter Distances For each Vertex-\n");
+    for (int i = 0; i < ver; i++)
+    {
+        printf("From Vertex %c : ",i + 97);
+        for(int j=0;j<ver;j++){
+            scanf("%d",&graph[i][j]);
+        }
+    }
+    edgesCalulate();
+    edgesSort();
+    for (int i = 0; i < ver; i++)
+    {
+        set[i] = i;
+    }
+
+    for (int i = 0; i < edge_no; i++)
+    {
+        if (set[edges[i].pt1] != set[edges[i].pt2])
+        {
+            edges[i].sol = 1;
+            int temp;
+            temp = set[edges[i].pt1];
+            for (int j = 0; j < edge_no; j++)
+            {
+                if (set[j] == temp)
+                    set[j] = set[edges[i].pt2];
+            }
+        }
+    }
+    int sum = 0;
+    for (int i = 0; i < edge_no; i++)
+    {
+        if (edges[i].sol)
+        {
+            sum = sum + edges[i].wt;
+            printf(" wt- %d ", edges[i].wt);
+            printf(" ( %c , %c ) \n", edges[i].pt1 + 97, edges[i].pt2 + 97);
+        }
+    }
+    printf("Minimum Cost Of Spanning Tree: %d ", sum);
+    return 0;
+}

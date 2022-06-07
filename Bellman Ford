@@ -1,0 +1,74 @@
+#include<stdio.h>
+int graph[20][20];
+int distance[20];
+int num = 20;
+void InitialiseSingleSource(int source)
+{
+    for (int i = 0; i < num; i++)
+    {
+        distance[i] = 9999;
+    }
+    distance[source] = 0;
+}
+void relax(int u, int v)
+{
+    if (distance[v] > distance[u] + graph[u][v])
+    {
+        distance[v] = distance[u] + graph[u][v];
+    }
+}
+
+int BellmanFord(int source)
+{
+    InitialiseSingleSource(source);
+    for (int i = 0; i < num - 1; i++)
+    {
+        for (int j = 0; j < num; j++)
+        {
+            for (int k = 0; k < num; k++)
+            {
+                if (graph[j][k] == 0)
+                    continue;
+                relax(j, k);
+            }
+        }
+    }
+    for (int j = 0; j < num; j++)
+    {
+        for (int k = 0; k < num; k++)
+        {
+            if (graph[j][k] == 0)
+                continue;
+            if (distance[k] > distance[j] + graph[j][k])
+            {
+                printf("Graph has a Negative Cycle");
+                return 0;
+            }
+        }
+    }
+    return 1;
+}
+int main()
+{
+    int ans = 1;
+    printf("Enter Number of Vertices: ");
+    scanf("%d", &num);
+    printf("Enter Weight edges : \n");
+    for (int i = 0; i < num; i++)
+    {
+        printf("From Vertex %d: ", i + 1);
+        for (int j = 0; j < num; j++)
+        {
+            scanf("%d", &graph[i][j]);
+        }
+    }
+    ans = BellmanFord(0);
+    if (ans)
+    {
+        for (int i = 0; i < num; i++)
+        {
+            printf("%d ", distance[i]);
+        }
+    }
+    return 0;
+}
